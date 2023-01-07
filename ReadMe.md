@@ -15,3 +15,11 @@
 7. Upload only the mymalloc.c and mymalloc.h to UGVLE by the due date.
 
 8. You cannot use malloc() and free() in your implementation of MyMalloc() and MyFree().
+
+# Execute
+
+Run the below codes in your terminal
+
+`gcc index.c mymalloc.c -o index`
+
+`index.exe`

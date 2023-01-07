@@ -85,7 +85,7 @@ void MyFree(void *ptr)
         return;
 
     /* get the block and set the block pointer as free */
-    struct block *_block = (struct block *)ptr - 1;
+    struct block *_block = (struct block *)ptr - BLOCK_SIZE;
     _block->free = 1;
 
     /* check if the block next to it is free and merge them if so */

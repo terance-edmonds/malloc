@@ -1,0 +1,8 @@
+{
+    "cSpell.words": [
+        "mymalloc"
+    ],
+    "files.associations": {
+        "mymalloc.h": "c"
+    }
+}

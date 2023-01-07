@@ -24,6 +24,7 @@ struct block *init = NULL;
 
 /* support functions */
 static int is_free(struct block *, size_t);
+static void debug(void *);
 
 void *MyMalloc(size_t size)
 {
@@ -53,6 +54,9 @@ void *MyMalloc(size_t size)
             ptr->size = _size;
             ptr->free = 0;
 
+            /* debug */
+            /* debug(ptr); */
+
             /* create a free block for the remaining memory space */
             struct block *next = NULL;
 
@@ -62,6 +66,9 @@ void *MyMalloc(size_t size)
                 next->size = available_size - _size;
                 next->free = 1;
                 next->next = ptr->next;
+
+                /* debug */
+                /* debug(next); */
             }
 
             /* link the current block pointer with the next free memory block */
@@ -88,6 +95,9 @@ void MyFree(void *ptr)
     struct block *_block = (struct block *)ptr - BLOCK_SIZE;
     _block->free = 1;
 
+    /* debug */
+    /* debug(_block); */
+
     /* check if the block next to it is free and merge them if so */
     struct block *next = _block->next;
 
@@ -97,10 +107,24 @@ void MyFree(void *ptr)
         _block->size += BLOCK_SIZE + next->size; // (size of the current block + size of the free block)
         _block->next = next->next;               // link the two blocks
     }
+
+    /* debug */
+    /* debug(_block); */
 }
 
 /* check if free and has enough space functions */
 int is_free(struct block *ptr, size_t size)
 {
     return ptr->free && ptr->size >= size;
+}
+
+/* print block (for debugging) */
+void debug(void *ptr)
+{
+    struct block *_block = (struct block *)ptr;
+
+    printf("\n==== block ====\n");
+    printf("free: %d\n", _block->free);
+    printf("size: %d\n", _block->size);
+    printf("===== end =====\n");
 }

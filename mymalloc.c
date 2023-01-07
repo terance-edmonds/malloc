@@ -1,6 +1,7 @@
 /* Malloc and Free function implementation */
 
 /* import mymalloc.h header file */
+#include <stdio.h>
 #include "mymalloc.h"
 
 /* block that stores malloc data */
@@ -21,7 +22,7 @@ static char mem[MEMORY_SIZE];
 /* starting block pointer */
 struct block *init = NULL;
 
-/* functions */
+/* support functions */
 static int is_free(struct block *, size_t);
 
 void *MyMalloc(size_t size)
@@ -31,7 +32,7 @@ void *MyMalloc(size_t size)
     if (init == NULL)
     {
         /* assign the start memory address and allocate the initiate memory block */
-        init = mem;
+        init = (struct block *)mem;
         init->size = MEMORY_SIZE - BLOCK_SIZE;
         init->free = 1;
         init->next = NULL;
@@ -60,37 +61,41 @@ void *MyMalloc(size_t size)
                 next = ptr + _size;
                 next->size = available_size - _size;
                 next->free = 1;
-                next->next = NULL;
+                next->next = ptr->next;
             }
 
             /* link the current block pointer with the next free memory block */
             ptr->next = next;
+
+            /* return the starting memory address of the data section */
+            return ptr + BLOCK_SIZE;
         }
 
         ptr = ptr->next;
     }
 
-    /* if there are no memory block with enough memory spaced it will return NULL */
+    /* if there are no memory block with enough memory spaced then return NULL */
     return NULL;
 }
 
-void MyFree(struct block *ptr)
+void MyFree(void *ptr)
 {
     /* if the block pointer is null do nothing */
     if (ptr == NULL)
         return;
 
-    /* set the block pointer as free */
-    ptr->free = 1;
+    /* get the block and set the block pointer as free */
+    struct block *_block = (struct block *)ptr - 1;
+    _block->free = 1;
 
     /* check if the block next to it is free and merge them if so */
-    struct block *next = ptr->next;
+    struct block *next = _block->next;
 
     /* merge the current block and next block */
     if (next != NULL && next->size > 0)
     {
-        ptr->size += BLOCK_SIZE + next->size; // (size of the current block + size of the free block)
-        ptr->next = next->next;               // link the two blocks
+        _block->size += BLOCK_SIZE + next->size; // (size of the current block + size of the free block)
+        _block->next = next->next;               // link the two blocks
     }
 }
 

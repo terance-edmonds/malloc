@@ -3,6 +3,8 @@
         "mymalloc"
     ],
     "files.associations": {
-        "mymalloc.h": "c"
+        "mymalloc.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c"
     }
 }

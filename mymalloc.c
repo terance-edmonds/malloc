@@ -25,6 +25,7 @@ struct block *init = NULL;
 /* support functions */
 static int is_free(struct block *, size_t);
 static void debug(void *);
+static void memory();
 
 void *MyMalloc(size_t size)
 {
@@ -115,6 +116,8 @@ void MyFree(void *ptr)
 /* check if free and has enough space functions */
 int is_free(struct block *ptr, size_t size)
 {
+    /* debug */
+    /*  memory(); */
     return ptr->free && ptr->size >= size;
 }
 
@@ -127,4 +130,18 @@ void debug(void *ptr)
     printf("free: %d\n", _block->free);
     printf("size: %d\n", _block->size);
     printf("===== end =====\n");
+}
+
+/* print memory */
+void memory()
+{
+    printf("\n==== memory ====\n");
+    printf("[");
+    for (size_t i = 0; i < MEMORY_SIZE; i++)
+    {
+        printf("%d,", mem[i]);
+    }
+
+    printf("]");
+    printf("\n===== end =====\n");
 }
